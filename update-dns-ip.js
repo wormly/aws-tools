@@ -1,14 +1,13 @@
 
 var argv = require('optimist').argv;
 
-var filterRegexp = new RegExp(argv.regexp, 'i');
 var attempts = argv.attempts || 5;
 
 var awssum = require('awssum');
 var amazon = awssum.load('amazon/amazon');
-var Ec2 = awssum.load('amazon/ec2').Ec2;
+var Route53 = awssum.load('amazon/route53').Route53;
 
-var ec2 = new Ec2({
+var route = new Route53({
 	accessKeyId : argv.key,
 	secretAccessKey : argv.secret,
 	region : argv.region || 'eu-west-1'
@@ -19,11 +18,18 @@ var request = function (attempt) {
 		process.exit(1);
 	}
 
-	ec2.DescribeSnapshots({
-		Filter : [{
-			Name : 'status',
-			Value : [ 'completed' ]
-		}]
+	route.ChangeResourceRecordSets({
+		HostedZoneId   : argv.zone || 'dev.worm.ly',
+		Comment        : 'Automated change at '+new Date().toString(),
+		Changes        : [
+			{
+				Action          : 'CREATE',
+				Name            : argv.name || 'chef.dev.worm.ly',
+				Type            : 'A',
+				Ttl             : argv.ttl || 60,
+				ResourceRecords : [argv.ip]
+			},
+		]
 	}, function (err, result) {
 		if (err) {
 			console.log(err.Body.ErrorResponse);
@@ -32,17 +38,7 @@ var request = function (attempt) {
 			return;
 		}
 
-		var items = result.Body.DescribeSnapshotsResponse.snapshotSet.item;
-
-		items = items.filter(function (item) {
-			return filterRegexp.test(item.description);
-		});
-
-		items = items.sort(function (a, b) {
-			return new Date(b.startTime).getTime() - new Date(a.startTime).getTime();
-		});
-
-		console.log(items[0].snapshotId);
+		console.log(result.Body);
 	});
 };
 

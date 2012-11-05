@@ -3,6 +3,6 @@
 	"version": "0.0.0",
 	"dependencies": {
 		"optimist": "",
-		"aws2js": ""
+		"awssum": ""
 	}
 }
