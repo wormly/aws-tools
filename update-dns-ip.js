@@ -12,7 +12,7 @@ var InstanceData = require('./lib/instancedata.js');
 
 var instanceDataGetter = new InstanceData(require('request'));
 
-instanceDataGetter.getRegion(function(region) {
+instanceDataGetter.getRegion(function(err, region) {
 	var route = new Route53({
 		accessKeyId : argv.key || process.env.AWS_KEY,
 		secretAccessKey : argv.secret || process.env.AWS_SECRET,
@@ -29,6 +29,7 @@ instanceDataGetter.getRegion(function(region) {
 			ip: argv.ip // required
 		}, callback);
 	}, function(err, data) {
-		console.log("Finished:", err, data);
+		console.log("Finished:", data);
+		if (err) console.log("Error:", err);
 	});
 });
