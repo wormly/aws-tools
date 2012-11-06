@@ -4,14 +4,15 @@ require('./utils.js');
 describe('Volume creator', function() {
 	var VolumeCreator = require('../lib/volumecreator.js');
 
-	var creator, ec2, data, snapId = '3123', snapSize = '1312', device = '/dev/vxcvxc';
+	var creator, ec2, data, snapId = '3123', snapSize = '1312', device = '/dev/vxcvxc', fs;
 
 	var doneCallback;
 
 	beforeEach(function() {
 		ec2 = stub('CreateVolume', 'AttachVolume');
 		data = stub('getInstanceId', 'getAvailabilityZone');
-		creator = new VolumeCreator(ec2, data);
+		fs = stub('watch');
+		creator = new VolumeCreator(ec2, data, fs);
 		doneCallback = jasmine.createSpy();
 	});
 
@@ -38,12 +39,24 @@ describe('Volume creator', function() {
 
 		expect(ec2.AttachVolume.mostRecentCall.args[0]).toEqual({ InstanceId : 'instid', VolumeId : 'volid', Device : '/dev/vxcvxc' });
 
+		var watcher = stub('close');
+
+		fs.watch.andCallFake(function() {
+			return watcher;
+		});
+
 		ec2.AttachVolume.mostRecentCall.args[1](null, {
 			Body: {
 				AttachVolumeResponse: 'resp'
 			}
 		});
 
-		expect(doneCallback).toHaveBeenCalledWith(null, 'resp');
+		expect(fs.watch.mostRecentCall.args[0]).toEqual('/dev');
+
+		fs.watch.mostRecentCall.args[1]('change', 'otherhfgasdf;');
+		expect(doneCallback).not.toHaveBeenCalled();
+		fs.watch.mostRecentCall.args[1]('change', 'xvxc'); // 2 last letters preceded with d or xv
+
+		expect(doneCallback).toHaveBeenCalledWith(null, 'Attached');
 	});
 });

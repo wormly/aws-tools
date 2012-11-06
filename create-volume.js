@@ -17,7 +17,7 @@ instanceDataGetter.getRegion(function(err, region) {
 		region: region
 	});
 
-	var creator = new VolumeCreator(ec2, instanceDataGetter);
+	var creator = new VolumeCreator(ec2, instanceDataGetter, require('fs'));
 	var retrier = new Retrier(argv.attempts || 5);
 
 	retrier.run(function(callback) {
