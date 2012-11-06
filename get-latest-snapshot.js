@@ -9,8 +9,8 @@ var amazon = awssum.load('amazon/amazon');
 var Ec2 = awssum.load('amazon/ec2').Ec2;
 
 var ec2 = new Ec2({
-	accessKeyId : argv.key,
-	secretAccessKey : argv.secret,
+	accessKeyId : argv.key || process.env.AWS_KEY,
+	secretAccessKey : argv.secret || process.env.AWS_SECRET,
 	region : argv.region || 'eu-west-1'
 });
 
@@ -42,7 +42,7 @@ var request = function (attempt) {
 			return new Date(b.startTime).getTime() - new Date(a.startTime).getTime();
 		});
 
-		console.log(items[0].snapshotId);
+		console.log(items[0].snapshotId, items[0].volumeSize);
 	});
 };
 

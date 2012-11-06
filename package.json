@@ -4,6 +4,12 @@
 	"dependencies": {
 		"optimist": "",
 		"awssum": "",
-		"async": ""
+		"async": "",
+		"request": ""
+	},
+	"devDependencies": {
+		"jasmine-node": "",
+		"sinon": "",
+		"underscore": ""
 	}
 }
