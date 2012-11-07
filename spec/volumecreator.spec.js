@@ -57,6 +57,6 @@ describe('Volume creator', function() {
 		expect(doneCallback).not.toHaveBeenCalled();
 		fs.watch.mostRecentCall.args[1]('change', 'xvxc'); // 2 last letters preceded with d or xv
 
-		expect(doneCallback).toHaveBeenCalledWith(null, 'Attached');
+		expect(doneCallback).toHaveBeenCalledWith(null, 'volid');
 	});
 });

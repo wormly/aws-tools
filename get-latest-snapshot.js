@@ -22,6 +22,10 @@ instanceDataGetter.getRegion(function(err, region) {
 	finder.findSnapshot({
 		regexp: new RegExp(argv.regexp, 'i')
 	}, function(err, snapshot) {
-		console.log(snapshot.snapshotId, snapshot.volumeSize);
+		if (err) {
+			console.log(err);
+		} else {
+			console.log(snapshot.snapshotId, snapshot.volumeSize);
+		}
 	});
 });
