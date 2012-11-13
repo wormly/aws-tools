@@ -5,7 +5,7 @@ var amazon = awssum.load('amazon/amazon');
 var Ec2 = awssum.load('amazon/ec2').Ec2;
 
 var Retrier = require('./lib/retrier.js');
-var VolumeCreator = require('./lib/volumecreator.js');
+var SnapshotCreator = require('./lib/snapshotcreator.js');
 var InstanceData = require('./lib/instancedata.js');
 
 var instanceDataGetter = new InstanceData(require('request'));
@@ -17,17 +17,16 @@ instanceDataGetter.getRegion(function(err, region) {
 		region: region
 	});
 
-	var creator = new VolumeCreator(ec2, instanceDataGetter, require('fs'));
+	var creator = new SnapshotCreator(ec2, instanceDataGetter);
 	var retrier = new Retrier(argv.attempts || 5);
 
 	retrier.run(function(callback) {
-		creator.createVolume({
-			snapshotSize: argv.snapshotSize,
-			snapshotId: argv.snapshotId,
-			device: argv.device || '/dev/sdh'
+		creator.createSnapshot({
+			device: argv.device,
+			description: argv.description
 		}, callback);
 	}, function(err, data) {
-		console.log(data); // will return volume id if successful
+		console.log("Finished:", data);
 		if (err) console.log("Error:", err);
 	});
 });
