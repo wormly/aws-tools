@@ -25,7 +25,7 @@ describe('Instance data getter', function() {
 		dataGetter.getAvailabilityZone(cb);
 
 		request.mostRecentCall.args[1]('errrr');
-		expect(cb).toHaveBeenCalledWith('errrr');
+		expect(cb).toHaveBeenCalledWith('errrr', undefined);
 	});
 
 	it('gets region', function() {

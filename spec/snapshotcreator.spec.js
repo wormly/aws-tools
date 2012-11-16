@@ -21,6 +21,6 @@ describe('Volume creator', function() {
 			description: description
 		},  doneCallback);
 
-		expect().toHaveBeenCalled();
+
 	});
 });
