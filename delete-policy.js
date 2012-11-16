@@ -9,7 +9,9 @@ var IamAgent = require('./lib/iamagent.js');
 
 var iam = new Iam({
 	accessKeyId : argv.key || process.env.AWS_KEY,
-	secretAccessKey : argv.secret || process.env.AWS_SECRET
+	secretAccessKey : argv.secret || process.env.AWS_SECRET,
+	region: 'us-east-1'
+	// region is irrelevant for IAM, but awssum requires this value to know the endpoint is not "us-gov" whatever that is
 });
 
 var agent = new IamAgent(iam);
