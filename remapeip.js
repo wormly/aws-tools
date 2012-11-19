@@ -18,7 +18,7 @@ instanceDataGetter.getRegion(function(err, region) {
 		region: region
 	});
 
-	var agent = new EIPAgent(ec2);
+	var agent = new EIPAgent(ec2, instanceDataGetter);
 	agent.remapEIP({
 		ip: argv.ip
 	}, function(err) {
