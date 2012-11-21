@@ -15,6 +15,27 @@ describe('Snapshot deleter', function() {
 		clock.now = Date('2012-11-21T11:37:17.000Z').getTime();
 	});
 
+	it('deletes snapshots by description', function() {
+		deleter.deleteSnapshotsByDescription({
+			regexp: new RegExp('^Snappy', 'i')
+		}, doneCallback);
+
+		expect(ec2.DescribeSnapshots.mostRecentCall.args[0]).
+			toEqual({ });
+
+		ec2.DescribeSnapshots.mostRecentCall.args[1](null, {
+			Body: { DescribeSnapshotsResponse: { snapshotSet: { item: [
+				{ startTime: '2012-11-10T11:37:17.000Z', snapshotId: 'not matches', description: 'Not snappy' },
+				{ startTime: '2012-11-10T11:37:17.000Z', snapshotId: 'matches', description: 'snappy' }
+			]}}}
+		});
+
+		expect(ec2.DeleteSnapshot.mostRecentCall.args[0]).toEqual({ SnapshotId : 'matches' });
+		ec2.DeleteSnapshot.mostRecentCall.args[1]();
+
+		expect(doneCallback).toHaveBeenCalled();
+	});
+
 	it('deletes snapshots by device', function() {
 		deleter.deleteSnapshotsByDevice({
 			device: '/dev/ice'

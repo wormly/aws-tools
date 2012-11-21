@@ -15,15 +15,20 @@ instanceDataGetter.getRegion(function(err, region) {
 	var ec2 = new Ec2({
 		accessKeyId : argv.key || process.env.AWS_KEY,
 		secretAccessKey : argv.secret || process.env.AWS_SECRET,
-		region: region
+		region: argv.region || region
 	});
 
 	var retrier = new Retrier(argv.attempts || 5);
 	var deleter = new SnapshotDeleter(ec2, instanceDataGetter);
 
+	if (! argv.regexp) {
+		console.log("Regexp is required");
+		return;
+	}
+
 	retrier.run(function(callback) {
-		deleter.deleteSnapshotsByDevice({
-			device: argv.device
+		deleter.deleteSnapshotsByDescription({
+			regexp: new RegExp(argv.regexp, 'i')
 		}, callback);
 	}, function(err) {
 		if (err) console.log("Error:", err);
