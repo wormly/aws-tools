@@ -24,8 +24,8 @@ describe('EIP Agent', function() {
 
 		expect(ec2.AssociateAddress.mostRecentCall.args[0]).toEqual({ PublicIp : ip, InstanceId : 'instance' });
 
-		ec2.AssociateAddress.mostRecentCall.args[1]('err', 'data');
+		ec2.AssociateAddress.mostRecentCall.args[1](null, 'data');
 
-		expect(cb).toHaveBeenCalledWith('err', 'data');
+		expect(cb).toHaveBeenCalledWith(null);
 	});
 });
