@@ -26,8 +26,11 @@ instanceDataGetter.getRegion(function(err, region) {
 			snapshotId: argv.snapshotId,
 			device: argv.device || '/dev/sdh'
 		}, callback);
-	}, function(err, data) {
-		console.log(data); // will return volume id if successful
-		if (err) console.log("Error:", err);
+	}, function(err, volumeId) {
+		if (err) {
+			console.error(err);
+		} else {
+			console.log(volumeId);
+		}
 	});
 });

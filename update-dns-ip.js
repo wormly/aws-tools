@@ -29,7 +29,10 @@ instanceDataGetter.getRegion(function(err, region) {
 			ip: argv.ip // required
 		}, callback);
 	}, function(err, data) {
-		console.log("Finished:", data);
-		if (err) console.log("Error:", err);
+		if (err) {
+			console.error(err);
+		} else {
+			console.log("Finished:", data);
+		}
 	});
 });

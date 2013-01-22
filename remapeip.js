@@ -11,19 +11,28 @@ var InstanceData = require('./lib/instancedata.js');
 
 var instanceDataGetter = new InstanceData(require('request'));
 
-instanceDataGetter.getRegion(function(err, region) {
-	var ec2 = new Ec2({
-		accessKeyId : argv.key || process.env.AWS_KEY,
-		secretAccessKey : argv.secret || process.env.AWS_SECRET,
-		region: region
-	});
+var retrier = new Retrier(argv.attempts || 5);
 
-	var agent = new EIPAgent(ec2, instanceDataGetter);
-	agent.remapEIP({
-		ip: argv.ip
-	}, function(err) {
+retrier.run(function(callback) {
+	instanceDataGetter.getRegion(function(err, region) {
 		if (err) {
-			console.log(err);
+			callback(err);
+			return;
 		}
+
+		var ec2 = new Ec2({
+			accessKeyId : argv.key || process.env.AWS_KEY,
+			secretAccessKey : argv.secret || process.env.AWS_SECRET,
+			region: region
+		});
+
+		var agent = new EIPAgent(ec2, instanceDataGetter);
+		agent.remapEIP({
+			ip: argv.ip
+		}, callback);
 	});
+}, function(err) {
+	if (err) {
+		console.error(err);
+	}
 });

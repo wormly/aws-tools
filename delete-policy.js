@@ -23,5 +23,7 @@ retrier.run(function(callback) {
 		userName: argv.userName
 	}, callback);
 }, function(err, data) {
-	if (err) console.log("Error:", err);
+	if (err) {
+		console.error(err);
+	}
 });

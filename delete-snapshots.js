@@ -31,6 +31,8 @@ instanceDataGetter.getRegion(function(err, region) {
 			regexp: new RegExp(argv.regexp, 'i')
 		}, callback);
 	}, function(err) {
-		if (err) console.log("Error:", err);
+		if (err) {
+			console.error(err);
+		}
 	});
 });

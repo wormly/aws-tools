@@ -25,6 +25,8 @@ instanceDataGetter.getRegion(function(err, region) {
 			device: argv.device
 		}, callback);
 	}, function(err) {
-		if (err) console.log("Error:", err);
+		if (err) {
+			console.error(err);
+		}
 	});
 });
