@@ -27,6 +27,7 @@ instanceDataGetter.getRegion(function(err, region) {
 	}, function(err) {
 		if (err) {
 			console.error(err);
+			process.exit(100);
 		}
 	});
 });

@@ -35,6 +35,7 @@ retrier.run(function(callback) {
 }, function(err, snapshot) {
 	if (err) {
 		console.error(err);
+		process.exit(100);
 	} else {
 		console.log(snapshot.snapshotId, snapshot.volumeSize);
 	}

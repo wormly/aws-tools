@@ -31,6 +31,7 @@ instanceDataGetter.getRegion(function(err, region) {
 	}, function(err, data) {
 		if (err) {
 			console.error(err);
+			process.exit(100);
 		} else {
 			console.log("Finished:", data);
 		}

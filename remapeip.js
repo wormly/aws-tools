@@ -34,5 +34,6 @@ retrier.run(function(callback) {
 }, function(err) {
 	if (err) {
 		console.error(err);
+		process.exit(100);
 	}
 });

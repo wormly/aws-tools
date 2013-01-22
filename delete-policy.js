@@ -25,5 +25,6 @@ retrier.run(function(callback) {
 }, function(err, data) {
 	if (err) {
 		console.error(err);
+		process.exit(100);
 	}
 });

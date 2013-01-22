@@ -29,6 +29,7 @@ instanceDataGetter.getRegion(function(err, region) {
 	}, function(err, volumeId) {
 		if (err) {
 			console.error(err);
+			process.exit(100);
 		} else {
 			console.log(volumeId);
 		}
