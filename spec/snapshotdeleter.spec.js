@@ -26,6 +26,7 @@ describe('Snapshot deleter', function() {
 		ec2.DescribeSnapshots.mostRecentCall.args[1](null, {
 			Body: { DescribeSnapshotsResponse: { snapshotSet: { item: [
 				{ startTime: '2012-11-10T11:37:17.000Z', snapshotId: 'not matches', description: 'Not snappy' },
+				{ startTime: '2012-11-10T11:38:17.000Z', snapshotId: 'matches-but-last', description: 'snappy' },
 				{ startTime: '2012-11-10T11:37:17.000Z', snapshotId: 'matches', description: 'snappy' }
 			]}}}
 		});
@@ -33,6 +34,7 @@ describe('Snapshot deleter', function() {
 		expect(ec2.DeleteSnapshot.mostRecentCall.args[0]).toEqual({ SnapshotId : 'matches' });
 		ec2.DeleteSnapshot.mostRecentCall.args[1]();
 
+		expect(ec2.DeleteSnapshot.callCount).toEqual(1);
 		expect(doneCallback).toHaveBeenCalled();
 	});
 
