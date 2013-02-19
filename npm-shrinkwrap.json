@@ -1,0 +1,115 @@
+{
+  "name": "AWS-tools",
+  "version": "0.0.0",
+  "dependencies": {
+    "optimist": {
+      "version": "0.3.5",
+      "dependencies": {
+        "wordwrap": {
+          "version": "0.0.2"
+        }
+      }
+    },
+    "awssum": {
+      "version": "0.12.2",
+      "dependencies": {
+        "fmt": {
+          "version": "0.4.0"
+        },
+        "xml2js": {
+          "version": "0.1.14",
+          "dependencies": {
+            "sax": {
+              "version": "0.5.1"
+            }
+          }
+        },
+        "dateformat": {
+          "version": "1.0.4-1.2.3"
+        },
+        "xml": {
+          "version": "0.0.7"
+        },
+        "data2xml": {
+          "version": "0.4.0"
+        },
+        "passgen": {
+          "version": "1.0.1",
+          "dependencies": {
+            "vows": {
+              "version": "0.7.0",
+              "dependencies": {
+                "eyes": {
+                  "version": "0.1.8"
+                },
+                "diff": {
+                  "version": "1.0.4"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "async": {
+      "version": "0.1.22"
+    },
+    "request": {
+      "version": "2.12.0",
+      "dependencies": {
+        "form-data": {
+          "version": "0.0.3",
+          "dependencies": {
+            "combined-stream": {
+              "version": "0.0.3",
+              "dependencies": {
+                "delayed-stream": {
+                  "version": "0.0.5"
+                }
+              }
+            },
+            "async": {
+              "version": "0.1.9"
+            }
+          }
+        },
+        "mime": {
+          "version": "1.2.7"
+        }
+      }
+    },
+    "underscore": {
+      "version": "1.4.3"
+    },
+    "jasmine-node": {
+      "version": "1.0.28",
+      "dependencies": {
+        "coffee-script": {
+          "version": "1.4.0"
+        },
+        "jasmine-reporters": {
+          "version": "0.2.1"
+        },
+        "requirejs": {
+          "version": "2.1.2"
+        },
+        "walkdir": {
+          "version": "0.0.5"
+        }
+      }
+    },
+    "sinon": {
+      "version": "1.5.2",
+      "dependencies": {
+        "buster-format": {
+          "version": "0.5.5",
+          "dependencies": {
+            "buster-core": {
+              "version": "0.6.4"
+            }
+          }
+        }
+      }
+    }
+  }
+}
