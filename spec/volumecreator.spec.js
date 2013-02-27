@@ -9,7 +9,7 @@ describe('Volume creator', function() {
 	var doneCallback;
 
 	beforeEach(function() {
-		ec2 = stub('CreateVolume', 'AttachVolume');
+		ec2 = stub('CreateVolume', 'AttachVolume', 'ModifyInstanceAttribute');
 		data = stub('getInstanceId', 'getAvailabilityZone');
 		fs = stub('watch');
 		creator = new VolumeCreator(ec2, data, fs);
@@ -56,6 +56,15 @@ describe('Volume creator', function() {
 		fs.watch.mostRecentCall.args[1]('change', 'otherhfgasdf;');
 		expect(doneCallback).not.toHaveBeenCalled();
 		fs.watch.mostRecentCall.args[1]('change', 'xvxc'); // 2 last letters preceded with d or xv
+
+		expect(ec2.ModifyInstanceAttribute.mostRecentCall.args[0]).toEqual({
+			InstanceId : 'instid',
+			BlockDeviceMapping : [
+				{ DeviceName : '/dev/vxcvxc', Ebs : [ { DeleteOnTermination : 'true', VolumeId : 'volid' } ] }
+			]
+		});
+
+		ec2.ModifyInstanceAttribute.mostRecentCall.args[1](null);
 
 		expect(doneCallback).toHaveBeenCalledWith(null, 'volid');
 	});
