@@ -42,8 +42,6 @@ describe('Retrier', function() {
 		runCallback.mostRecentCall.args[0]('err');
 		tick(baseTimeout * 2);
 
-		spyOn(process, 'exit');
-
 		expect(resultCallback.callCount).toEqual(0);
 
 		runCallback.mostRecentCall.args[0]('err');
@@ -51,7 +49,5 @@ describe('Retrier', function() {
 		expect(resultCallback.callCount).toEqual(1);
 
 		expect(resultCallback).toHaveBeenCalledWith('Attempts exceeded');
-
-		expect(process.exit).toHaveBeenCalledWith(1);
 	});
 });
