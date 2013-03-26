@@ -4,108 +4,155 @@
   "dependencies": {
     "optimist": {
       "version": "0.3.5",
+      "from": "optimist@",
       "dependencies": {
         "wordwrap": {
-          "version": "0.0.2"
+          "version": "0.0.2",
+          "from": "wordwrap@~0.0.2"
         }
       }
     },
-    "awssum": {
-      "version": "0.12.2",
+    "awssum-amazon-ec2": {
+      "version": "1.0.0",
+      "from": "awssum-amazon-ec2@",
       "dependencies": {
-        "fmt": {
-          "version": "0.4.0"
-        },
-        "xml2js": {
-          "version": "0.1.14",
-          "dependencies": {
-            "sax": {
-              "version": "0.5.1"
-            }
-          }
+        "data2xml": {
+          "version": "0.8.0",
+          "from": "data2xml@0.8.x"
         },
         "dateformat": {
-          "version": "1.0.4-1.2.3"
-        },
-        "xml": {
-          "version": "0.0.7"
-        },
+          "version": "1.0.4-1.2.3",
+          "from": "dateformat@1.0.4-1.2.3"
+        }
+      }
+    },
+    "awssum-amazon-iam": {
+      "version": "1.0.0",
+      "from": "awssum-amazon-iam@",
+      "resolved": "https://registry.npmjs.org/awssum-amazon-iam/-/awssum-amazon-iam-1.0.0.tgz",
+      "dependencies": {
         "data2xml": {
-          "version": "0.4.0"
+          "version": "0.8.0",
+          "from": "data2xml@0.8.x"
         },
-        "passgen": {
-          "version": "1.0.1",
-          "dependencies": {
-            "vows": {
-              "version": "0.7.0",
-              "dependencies": {
-                "eyes": {
-                  "version": "0.1.8"
-                },
-                "diff": {
-                  "version": "1.0.4"
-                }
-              }
-            }
-          }
+        "dateformat": {
+          "version": "1.0.4-1.2.3",
+          "from": "dateformat@1.0.4-1.2.3"
+        }
+      }
+    },
+    "awssum-amazon-route53": {
+      "version": "1.0.0",
+      "from": "awssum-amazon-route53@",
+      "resolved": "https://registry.npmjs.org/awssum-amazon-route53/-/awssum-amazon-route53-1.0.0.tgz",
+      "dependencies": {
+        "data2xml": {
+          "version": "0.8.0",
+          "from": "data2xml@0.8.x"
+        },
+        "dateformat": {
+          "version": "1.0.4-1.2.3",
+          "from": "dateformat@1.0.4-1.2.3"
         }
       }
     },
     "async": {
-      "version": "0.1.22"
+      "version": "0.1.22",
+      "from": "async@0.1.22"
     },
     "request": {
       "version": "2.12.0",
+      "from": "request@2.12.0",
       "dependencies": {
         "form-data": {
           "version": "0.0.3",
+          "from": "form-data",
           "dependencies": {
             "combined-stream": {
               "version": "0.0.3",
+              "from": "combined-stream@0.0.3",
               "dependencies": {
                 "delayed-stream": {
-                  "version": "0.0.5"
+                  "version": "0.0.5",
+                  "from": "delayed-stream@0.0.5"
                 }
               }
             },
             "async": {
-              "version": "0.1.9"
+              "version": "0.1.9",
+              "from": "async@0.1.9"
             }
           }
         },
         "mime": {
-          "version": "1.2.7"
+          "version": "1.2.7",
+          "from": "mime"
         }
       }
     },
     "underscore": {
-      "version": "1.4.3"
+      "version": "1.4.3",
+      "from": "underscore@1.4.3"
+    },
+    "awssum-amazon": {
+      "version": "1.0.2",
+      "from": "awssum-amazon@",
+      "dependencies": {
+        "dateformat": {
+          "version": "1.0.4-1.2.3",
+          "from": "dateformat@1.0.4-1.2.3"
+        }
+      }
     },
     "jasmine-node": {
       "version": "1.0.28",
+      "from": "jasmine-node@1.0.28",
       "dependencies": {
         "coffee-script": {
-          "version": "1.4.0"
+          "version": "1.4.0",
+          "from": "coffee-script@1.4.0"
         },
         "jasmine-reporters": {
-          "version": "0.2.1"
+          "version": "0.2.1",
+          "from": "jasmine-reporters@0.2.1"
         },
         "requirejs": {
-          "version": "2.1.2"
+          "version": "2.1.2",
+          "from": "requirejs@2.1.2"
         },
         "walkdir": {
-          "version": "0.0.5"
+          "version": "0.0.5",
+          "from": "walkdir@0.0.5"
+        }
+      }
+    },
+    "awssum": {
+      "version": "1.0.0-beta",
+      "from": "awssum@1.0.x",
+      "dependencies": {
+        "xml2js": {
+          "version": "0.2.6",
+          "from": "xml2js@0.2.x",
+          "dependencies": {
+            "sax": {
+              "version": "0.4.2",
+              "from": "sax@0.4.2"
+            }
+          }
         }
       }
     },
     "sinon": {
       "version": "1.5.2",
+      "from": "sinon@1.5.2",
       "dependencies": {
         "buster-format": {
           "version": "0.5.5",
+          "from": "buster-format@0.5.5",
           "dependencies": {
             "buster-core": {
-              "version": "0.6.4"
+              "version": "0.6.4",
+              "from": "buster-core@0.6.4"
             }
           }
         }

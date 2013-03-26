@@ -1,8 +1,6 @@
 
 var argv = require('optimist').argv;
-var awssum = require('awssum');
-var amazon = awssum.load('amazon/amazon');
-var Iam = awssum.load('amazon/iam').Iam;
+var Iam = require('awssum-amazon-iam').Iam;
 
 var Retrier = require('./lib/retrier.js');
 var IamAgent = require('./lib/iamagent.js');

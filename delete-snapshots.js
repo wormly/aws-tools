@@ -1,9 +1,7 @@
 
 var argv = require('optimist').argv;
 
-var awssum = require('awssum');
-var amazon = awssum.load('amazon/amazon');
-var Ec2 = awssum.load('amazon/ec2').Ec2;
+var Ec2 = require('awssum-amazon-ec2').Ec2;
 
 var Retrier = require('./lib/retrier.js');
 var SnapshotDeleter = require('./lib/snapshotdeleter.js');

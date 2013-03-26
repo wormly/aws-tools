@@ -2,9 +2,7 @@
 var argv = require('optimist').argv;
 
 var async = require('async');
-var awssum = require('awssum');
-var amazon = awssum.load('amazon/amazon');
-var Route53 = awssum.load('amazon/route53').Route53;
+var Route53 = require('awssum-amazon-route53').Route53;
 
 var Retrier = require('./lib/retrier.js');
 var DNSUpdater = require('./lib/dnsupdater.js');

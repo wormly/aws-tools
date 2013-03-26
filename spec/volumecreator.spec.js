@@ -57,14 +57,14 @@ describe('Volume creator', function() {
 		expect(doneCallback).not.toHaveBeenCalled();
 		fs.watch.mostRecentCall.args[1]('change', 'xvxc'); // 2 last letters preceded with d or xv
 
-//		expect(ec2.ModifyInstanceAttribute.mostRecentCall.args[0]).toEqual({
-//			InstanceId : 'instid',
-//			BlockDeviceMapping : [
-//				{ DeviceName : '/dev/vxcvxc', Ebs : [ { DeleteOnTermination : 'true', VolumeId : 'volid' } ] }
-//			]
-//		});
-//
-//		ec2.ModifyInstanceAttribute.mostRecentCall.args[1](null);
+		expect(ec2.ModifyInstanceAttribute.mostRecentCall.args[0]).toEqual({
+			InstanceId : 'instid',
+			BlockDeviceMapping : [
+				{ DeviceName : '/dev/vxcvxc', Ebs : [ { DeleteOnTermination : 'true', VolumeId : 'volid' } ] }
+			]
+		});
+
+		ec2.ModifyInstanceAttribute.mostRecentCall.args[1](null);
 
 		expect(doneCallback).toHaveBeenCalledWith(null, 'volid');
 	});
