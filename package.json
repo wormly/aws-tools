@@ -2,10 +2,8 @@
 	"name": "AWS-tools",
 	"version": "0.0.0",
 	"dependencies": {
+		"aws-sdk": "",
 		"optimist": "",
-		"awssum-amazon-ec2": "",
-		"awssum-amazon-iam": "",
-		"awssum-amazon-route53": "",
 		"async": "",
 		"request": ""
 	},

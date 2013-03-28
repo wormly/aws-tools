@@ -1,7 +1,14 @@
 
 var argv = require('optimist').argv;
 
-var Ec2 = require('awssum-amazon-ec2').Ec2;
+var AWS = require('aws-sdk');
+
+AWS.config.update({
+	accessKeyId: process.env.AWS_KEY,
+	secretAccessKey: process.env.AWS_SECRET,
+	region: process.env.AWS_REGION,
+	maxRetries: 1
+});
 
 var Retrier = require('./lib/retrier.js');
 var EIPAgent = require('./lib/eipagent.js');
@@ -12,23 +19,14 @@ var instanceDataGetter = new InstanceData(require('request'));
 var retrier = new Retrier(argv.attempts || 5);
 
 retrier.run(function(callback) {
-	instanceDataGetter.getRegion(function(err, region) {
-		if (err) {
-			callback(err);
-			return;
-		}
+	var ec2 = new AWS.EC2();
 
-		var ec2 = new Ec2({
-			accessKeyId : argv.key || process.env.AWS_KEY,
-			secretAccessKey : argv.secret || process.env.AWS_SECRET,
-			region: region
-		});
+	var agent = new EIPAgent(ec2.client, instanceDataGetter);
 
-		var agent = new EIPAgent(ec2, instanceDataGetter);
-		agent.remapEIP({
-			ip: argv.ip
-		}, callback);
-	});
+	agent.remapEIP({
+		ip: argv.ip,
+		instance: argv.instance
+	}, callback);
 }, function(err) {
 	if (err) {
 		console.error(err);
