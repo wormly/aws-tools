@@ -1,40 +1,30 @@
 
 var argv = require('optimist').argv;
 
-var Ec2 = require('awssum-amazon-ec2').Ec2;
-
 var Retrier = require('./lib/retrier.js');
 var SnapshotFinder = require('./lib/snapshotfinder.js');
-var InstanceData = require('./lib/instancedata.js');
+var AWS = require('aws-sdk');
 
-var instanceDataGetter = new InstanceData(require('request'));
+AWS.config.update({
+	accessKeyId: process.env.AWS_KEY,
+	secretAccessKey: process.env.AWS_SECRET,
+	region: process.env.AWS_REGION
+});
 
+var ec2 = new AWS.EC2();
 var retrier = new Retrier(argv.attempts || 5);
 
 retrier.run(function(callback) {
-	instanceDataGetter.getRegion(function(err, region) {
-		if (err) {
-			callback(err);
-			return;
-		}
+	var finder = new SnapshotFinder(ec2.client);
 
-		var ec2 = new Ec2({
-			accessKeyId : argv.key || process.env.AWS_KEY,
-			secretAccessKey : argv.secret || process.env.AWS_SECRET,
-			region: region
-		});
-
-		var finder = new SnapshotFinder(ec2);
-
-		finder.findSnapshot({
-			regexp: new RegExp(argv.regexp, 'i')
-		}, callback);
-	});
+	finder.findSnapshot({
+		regexp: new RegExp(argv.regexp, 'i')
+	}, callback);
 }, function(err, snapshot) {
 	if (err) {
 		console.error(err);
 		process.exit(100);
 	} else {
-		console.log(snapshot.snapshotId, snapshot.volumeSize);
+		console.log(snapshot.SnapshotId, snapshot.VolumeSize);
 	}
 });

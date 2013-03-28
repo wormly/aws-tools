@@ -7,7 +7,7 @@ describe('Snapshot finder', function() {
 	var finder, ec2, foundCb;
 
 	beforeEach(function() {
-		ec2 = stub('DescribeSnapshots');
+		ec2 = stub('describeSnapshots');
 		foundCb = jasmine.createSpy();
 		finder = new SnapshotFinder(ec2);
 	});
@@ -17,31 +17,29 @@ describe('Snapshot finder', function() {
 			regexp: new RegExp('ccz', 'i')
 		}, foundCb);
 
-		expect(ec2.DescribeSnapshots.mostRecentCall.args[0]).toEqual({ Filter : [ { Name : 'status', Value : [ 'completed' ] } ] });
-
-		ec2.DescribeSnapshots.mostRecentCall.args[1](null, {
-			Body: {
-				DescribeSnapshotsResponse: {
-					snapshotSet: {
-						item: [
-							{
-								description: 'not matches',
-								startTime: new Date(10000)
-							},
-							{
-								description: 'ccz',
-								startTime: new Date(1000)
-							},
-							{
-								description: 'CCZ',
-								startTime: new Date(5000)
-							}
-						]
-					}
-				}
-			}
+		expect(ec2.describeSnapshots.mostRecentCall.args[0]).toEqual({
+			Filters : [{
+				Name : 'status', Values : [ 'completed' ]
+			}]
 		});
 
-		expect(foundCb.mostRecentCall.args[1].description).toEqual('CCZ');
+		ec2.describeSnapshots.mostRecentCall.args[1](null, {
+			Snapshots: [
+				{
+					Description: 'not matches',
+					StartTime: new Date(10000)
+				},
+				{
+					Description: 'ccz',
+					StartTime: new Date(1000)
+				},
+				{
+					Description: 'CCZ',
+					StartTime: new Date(5000)
+				}
+			]
+		});
+
+		expect(foundCb.mostRecentCall.args[1].Description).toEqual('CCZ');
 	});
 });

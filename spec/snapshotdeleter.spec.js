@@ -25,9 +25,9 @@ describe('Snapshot deleter', function() {
 
 		ec2.describeSnapshots.mostRecentCall.args[1](null, {
 			Snapshots: [
-				{ StartTime: '2012-11-10T11:37:17.000Z', SnapshotId: 'not matches', Description: 'Not snappy' },
-				{ StartTime: '2012-11-10T11:38:17.000Z', SnapshotId: 'matches-but-last', Description: 'snappy' },
-				{ StartTime: '2012-11-10T11:37:17.000Z', SnapshotId: 'matches', Description: 'snappy' }
+				{ StartTime: new Date('2012-11-10T11:37:17.000Z'), SnapshotId: 'not matches', Description: 'Not snappy' },
+				{ StartTime: new Date('2012-11-10T11:38:17.000Z'), SnapshotId: 'matches-but-last', Description: 'snappy' },
+				{ StartTime: new Date('2012-11-10T11:37:17.000Z'), SnapshotId: 'matches', Description: 'snappy' }
 			]
 		});
 
