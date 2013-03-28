@@ -4,7 +4,6 @@ var Ec2 = require('awssum-amazon-ec2').Ec2;
 
 var Retrier = require('./lib/retrier.js');
 var VolumeCreator = require('./lib/volumecreator.js');
-var InstanceData = require('./lib/instancedata.js');
 
 var instanceDataGetter = new InstanceData(require('request'));
 
