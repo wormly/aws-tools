@@ -9,7 +9,7 @@ describe('DNS Updater', function() {
 	var updatedCb;
 
 	beforeEach(function() {
-		route = stub('ListHostedZones', 'ListResourceRecordSets', 'ChangeResourceRecordSets');
+		route = stub('listHostedZones', 'listResourceRecordSets', 'changeResourceRecordSets');
 		updatedCb = jasmine.createSpy();
 		updater = new DNSUpdater(route);
 	});
@@ -21,56 +21,53 @@ describe('DNS Updater', function() {
 			ip: ip
 		}, updatedCb);
 
-		route.ListHostedZones.mostRecentCall.args[0](null, {
-			Body: {
-				ListHostedZonesResponse: {
-					HostedZones: {
-						HostedZone: {
-							Name: 'dev.worm.ly.',
-							Id: '/zonezone/idid'
-						}
-					}
-				}
-			}
+		route.listHostedZones.mostRecentCall.args[0](null, {
+			HostedZones: [{
+				Name: 'dev.worm.ly.',
+				Id: '/zonezone/idid'
+			}]
 		});
 
-		expect(route.ListResourceRecordSets.mostRecentCall.args[0]).toEqual({ HostedZoneId : 'idid' });
+		expect(route.listResourceRecordSets.mostRecentCall.args[0]).toEqual({ HostedZoneId : 'idid' });
 
-		route.ListResourceRecordSets.mostRecentCall.args[1](null, {
-			Body: {
-				ListResourceRecordSetsResponse: {
-					ResourceRecordSets: {
+		route.listResourceRecordSets.mostRecentCall.args[1](null, {
+			ResourceRecordSets: [{
+				Name: record+'.',
+				Type : 'A',
+				TTL: 123,
+				ResourceRecords: [{
+					Value: 'prev.ip'
+				}]
+			}]
+		});
+
+		expect(route.changeResourceRecordSets.mostRecentCall.args[0]).toEqual({
+			HostedZoneId : 'idid',
+			ChangeBatch: {
+				Changes : [
+					{
+						Action : 'DELETE',
 						ResourceRecordSet: {
-							TTL: 123,
-							Name: record+'.',
-							ResourceRecords: {
-								ResourceRecord: {
-									Value: 'prev.ip'
-								}
-							}
+							Name : 'chef.dev.worm.ly.',
+							Type : 'A',
+							TTL : 123,
+							ResourceRecords : [{
+								Value : 'prev.ip'
+							}]
+						}
+					}, {
+						Action : 'CREATE',
+						ResourceRecordSet: {
+							Name : 'chef.dev.worm.ly.',
+							Type : 'A',
+							TTL : 60,
+							ResourceRecords : [{
+								Value: '1.2.3.4'
+							}]
 						}
 					}
-				}
+				]
 			}
-		})
-
-		expect(route.ChangeResourceRecordSets.mostRecentCall.args[0]).toEqual({
-			HostedZoneId : 'idid',
-			Changes : [
-				{
-					Name : 'chef.dev.worm.ly.',
-					ResourceRecords : { ResourceRecord : 'prev.ip' },
-					Action : 'DELETE',
-					Ttl : 123
-				},
-				{
-					Action : 'CREATE',
-					Name : 'chef.dev.worm.ly.',
-					Type : 'A',
-					Ttl : 60,
-					ResourceRecords : [ '1.2.3.4' ]
-				}
-			]
 		});
 	});
 });

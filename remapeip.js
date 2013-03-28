@@ -6,13 +6,11 @@ var AWS = require('aws-sdk');
 AWS.config.update({
 	accessKeyId: process.env.AWS_KEY,
 	secretAccessKey: process.env.AWS_SECRET,
-	region: process.env.AWS_REGION,
-	maxRetries: 1
+	region: process.env.AWS_REGION
 });
 
 var Retrier = require('./lib/retrier.js');
 var EIPAgent = require('./lib/eipagent.js');
-var InstanceData = require('./lib/instancedata.js');
 
 var instanceDataGetter = new InstanceData(require('request'));
 
