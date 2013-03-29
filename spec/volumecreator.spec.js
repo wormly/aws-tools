@@ -10,7 +10,7 @@ describe('Volume creator', function() {
 	var doneCallback;
 
 	beforeEach(function() {
-		ec2 = stub('createVolume', 'attachVolume', 'modifyInstanceAttribute');
+		ec2 = stub('createVolume', 'attachVolume', 'modifyInstanceAttribute', 'describeInstanceAttribute');
 		creator = new VolumeCreator(ec2);
 		doneCallback = jasmine.createSpy();
 	});
@@ -41,6 +41,33 @@ describe('Volume creator', function() {
 		});
 
 		ec2.attachVolume.mostRecentCall.args[1](null, {});
+
+		expect(ec2.describeInstanceAttribute.mostRecentCall.args[0]).toEqual({
+			InstanceId : instance,
+			Attribute : 'blockDeviceMapping'
+		});
+
+		ec2.describeInstanceAttribute.mostRecentCall.args[1](null, {BlockDeviceMappings: [{
+			DeviceName: 'other',
+			Ebs: {
+				Status: 'attached'
+			}
+		}, {
+			DeviceName: device,
+			Ebs: {
+				Status: 'attaching'
+			}
+		}]}); // not attached yet
+
+		tick(5000);
+		expect(ec2.describeInstanceAttribute.callCount).toEqual(2);
+
+		ec2.describeInstanceAttribute.mostRecentCall.args[1](null, {BlockDeviceMappings: [{
+			DeviceName: device,
+			Ebs: {
+				Status: 'attached'
+			}
+		}]});
 
 		expect(ec2.modifyInstanceAttribute.mostRecentCall.args[0]).toEqual({
 			InstanceId : instance,

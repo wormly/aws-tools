@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/bash -x
 
 export AWS_REGION=eu-west-1
-export AWS_AZ=eu-west-1a
-export AWS_INSTANCE=i-82e0b0c8
+export AWS_AZ=eu-west-1c
+export AWS_INSTANCE=i-16a6f55c
 
 SNAPSHOT_SIZE=8
 SNAPSHOT_ID=snap-a9d92082
@@ -32,7 +32,7 @@ read volumeId <<< $(node create-volume.js --snapshotSize $SNAPSHOT_SIZE --snapsh
 if ec2-describe-instances $AWS_INSTANCE | grep $DEVICE | grep true; then
 	echo "Attached $volumeId. DeleteOnTermination set to true";
 else
-	echo "Failure";
+	echo "Failure $volumeId";
 fi
 
 # detach $volumeId
