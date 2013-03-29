@@ -4,15 +4,14 @@ require('./utils.js');
 describe('Volume creator', function() {
 	var VolumeCreator = require('../lib/volumecreator.js');
 
-	var creator, ec2, data, snapId = '3123', snapSize = '1312', device = '/dev/vxcvxc', fs;
+	var creator, ec2, snapId = '3123', snapSize = '1312', device = '/dev/vxcvxc', zone = 'az-1',
+		instance = 'i-1234123', volume = 'fasdfasdf';
 
 	var doneCallback;
 
 	beforeEach(function() {
-		ec2 = stub('CreateVolume', 'AttachVolume', 'ModifyInstanceAttribute');
-		data = stub('getInstanceId', 'getAvailabilityZone');
-		fs = stub('watch');
-		creator = new VolumeCreator(ec2, data, fs);
+		ec2 = stub('createVolume', 'attachVolume', 'modifyInstanceAttribute');
+		creator = new VolumeCreator(ec2);
 		doneCallback = jasmine.createSpy();
 	});
 
@@ -20,52 +19,42 @@ describe('Volume creator', function() {
 		creator.createVolume({
 			snapshotSize: snapSize,
 			snapshotId: snapId,
-			device: device
+			device: device,
+			zone: zone,
+			instance: instance
 		}, doneCallback);
 
-		data.getAvailabilityZone.mostRecentCall.args[0](null, 'azaz');
+		expect(ec2.createVolume.mostRecentCall.args[0]).toEqual({
+			Size : '1312',
+			SnapshotId : '3123',
+			AvailabilityZone : zone
+		});
 
-		expect(ec2.CreateVolume.mostRecentCall.args[0]).toEqual({ Size : '1312', SnapshotId : '3123', AvailabilityZone : 'azaz' });
+		ec2.createVolume.mostRecentCall.args[1](null, {
+			VolumeId: volume
+		});
 
-		ec2.CreateVolume.mostRecentCall.args[1](null, {
-			Body: {
-				CreateVolumeResponse: {
-					volumeId: 'volid'
+		expect(ec2.attachVolume.mostRecentCall.args[0]).toEqual({
+			InstanceId : instance,
+			VolumeId : volume,
+			Device : device
+		});
+
+		ec2.attachVolume.mostRecentCall.args[1](null, {});
+
+		expect(ec2.modifyInstanceAttribute.mostRecentCall.args[0]).toEqual({
+			InstanceId : instance,
+			BlockDeviceMappings : [{
+				DeviceName : device,
+				Ebs : {
+					DeleteOnTermination : true,
+					VolumeId : volume
 				}
-			}
+			}]
 		});
 
-		data.getInstanceId.mostRecentCall.args[0](null, 'instid');
+		ec2.modifyInstanceAttribute.mostRecentCall.args[1](null);
 
-		expect(ec2.AttachVolume.mostRecentCall.args[0]).toEqual({ InstanceId : 'instid', VolumeId : 'volid', Device : '/dev/vxcvxc' });
-
-		var watcher = stub('close');
-
-		fs.watch.andCallFake(function() {
-			return watcher;
-		});
-
-		ec2.AttachVolume.mostRecentCall.args[1](null, {
-			Body: {
-				AttachVolumeResponse: 'resp'
-			}
-		});
-
-		expect(fs.watch.mostRecentCall.args[0]).toEqual('/dev');
-
-		fs.watch.mostRecentCall.args[1]('change', 'otherhfgasdf;');
-		expect(doneCallback).not.toHaveBeenCalled();
-		fs.watch.mostRecentCall.args[1]('change', 'xvxc'); // 2 last letters preceded with d or xv
-
-		expect(ec2.ModifyInstanceAttribute.mostRecentCall.args[0]).toEqual({
-			InstanceId : 'instid',
-			BlockDeviceMapping : [
-				{ DeviceName : '/dev/vxcvxc', Ebs : [ { DeleteOnTermination : 'true', VolumeId : 'volid' } ] }
-			]
-		});
-
-		ec2.ModifyInstanceAttribute.mostRecentCall.args[1](null);
-
-		expect(doneCallback).toHaveBeenCalledWith(null, 'volid');
+		expect(doneCallback).toHaveBeenCalledWith(null, volume);
 	});
 });
