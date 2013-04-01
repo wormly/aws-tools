@@ -15,6 +15,28 @@ describe('Volume creator', function() {
 		doneCallback = jasmine.createSpy();
 	});
 
+	it('returns better error description', function() {
+		creator.createVolume({
+			snapshotSize: snapSize,
+			snapshotId: snapId,
+			device: device,
+			zone: zone,
+			instance: instance
+		}, doneCallback);
+
+		ec2.createVolume.mostRecentCall.args[1]({err: 1});
+
+		expect(doneCallback).toHaveBeenCalledWith({
+			err : 1,
+			operation : 'createVolume',
+			request : {
+				Size : snapSize,
+				SnapshotId : snapId,
+				AvailabilityZone : zone
+			}
+		});
+	});
+
 	it('creates and attaches a volume', function() {
 		creator.createVolume({
 			snapshotSize: snapSize,
