@@ -21,7 +21,7 @@ describe('Snapshot deleter', function() {
 		}, doneCallback);
 
 		expect(ec2.describeSnapshots.mostRecentCall.args[0]).
-			toEqual({ });
+			toEqual({ OwnerIds : ['self'] });
 
 		ec2.describeSnapshots.mostRecentCall.args[1](null, {
 			Snapshots: [
