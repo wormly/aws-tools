@@ -20,11 +20,11 @@ var options = {};
 	options[key] = argv[key];
 });
 
+options.instance = process.env.AWS_INSTANCE;
+options.zone = process.env.AWS_AZ;
+
 retrier.run(function(callback) {
-	creator.createVolume({
-		instance: process.env.AWS_INSTANCE,
-		zone: process.env.AWS_AZ
-	}, callback);
+	creator.createVolume(options, callback);
 }, function(err, volumeId) {
 	if (err) {
 		console.error(err);
