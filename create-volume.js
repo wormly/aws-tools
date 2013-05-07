@@ -15,11 +15,13 @@ var ec2 = new AWS.EC2();
 var creator = new VolumeCreator(ec2.client);
 var retrier = new Retrier(argv.attempts || 5);
 
+var options = {};
+['snapshotSize', 'snapshotId', 'device'].forEach(function(key) {
+	options[key] = argv[key];
+});
+
 retrier.run(function(callback) {
 	creator.createVolume({
-		snapshotSize: argv.snapshotSize,
-		snapshotId: argv.snapshotId,
-		device: argv.device || '/dev/sdh',
 		instance: process.env.AWS_INSTANCE,
 		zone: process.env.AWS_AZ
 	}, callback);

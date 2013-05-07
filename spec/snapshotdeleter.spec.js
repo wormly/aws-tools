@@ -11,8 +11,6 @@ describe('Snapshot deleter', function() {
 		dataGetter = stub('getInstanceId');
 		doneCallback = jasmine.createSpy();
 		deleter = new SnapshotDeleter(ec2, dataGetter);
-
-		clock.now = Date('2012-11-21T11:37:17.000Z').getTime();
 	});
 
 	it('deletes snapshots by description', function() {

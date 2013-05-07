@@ -9,7 +9,6 @@
 	},
 	"devDependencies": {
 		"jasmine-node": "",
-		"sinon": "",
 		"underscore": ""
 	}
 }

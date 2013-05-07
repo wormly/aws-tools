@@ -92,22 +92,6 @@
           "from": "walkdir@0.0.5"
         }
       }
-    },
-    "sinon": {
-      "version": "1.5.2",
-      "from": "sinon@1.5.2",
-      "dependencies": {
-        "buster-format": {
-          "version": "0.5.5",
-          "from": "buster-format@0.5.5",
-          "dependencies": {
-            "buster-core": {
-              "version": "0.6.4",
-              "from": "buster-core@0.6.4"
-            }
-          }
-        }
-      }
     }
   }
 }

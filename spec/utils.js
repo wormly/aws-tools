@@ -1,6 +1,5 @@
 
 var _ = require('underscore');
-var sinon = require('sinon');
 var EventEmitter = require('events').EventEmitter;
 
 global.stub = function () {
@@ -23,11 +22,3 @@ global.throws = function(what) {
 	};
 };
 
-var clock = sinon.clock.create();
-
-global.clock = clock;
-global.Date = clock.Date;
-
-['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'tick'].forEach(function(name) {
-	global[name] = clock[name].bind(clock);
-});

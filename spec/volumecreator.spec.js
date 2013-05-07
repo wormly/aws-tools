@@ -10,6 +10,8 @@ describe('Volume creator', function() {
 	var doneCallback;
 
 	beforeEach(function() {
+		jasmine.Clock.useMock();
+
 		ec2 = stub('createVolume', 'attachVolume', 'modifyInstanceAttribute', 'describeInstanceAttribute');
 		creator = new VolumeCreator(ec2);
 		doneCallback = jasmine.createSpy();
@@ -34,6 +36,20 @@ describe('Volume creator', function() {
 				SnapshotId : snapId,
 				AvailabilityZone : zone
 			}
+		});
+	});
+
+	it('does not send snapshotId if not provided', function() {
+		creator.createVolume({
+			snapshotSize: snapSize,
+			device: device,
+			zone: zone,
+			instance: instance
+		}, doneCallback);
+
+		expect(ec2.createVolume.mostRecentCall.args[0]).toEqual({
+			Size : '1312',
+			AvailabilityZone : zone
 		});
 	});
 
@@ -81,7 +97,7 @@ describe('Volume creator', function() {
 			}
 		}]}); // not attached yet
 
-		tick(5000);
+		jasmine.Clock.tick(5000);
 		expect(ec2.describeInstanceAttribute.callCount).toEqual(2);
 
 		ec2.describeInstanceAttribute.mostRecentCall.args[1](null, {BlockDeviceMappings: [{
