@@ -20,7 +20,8 @@ describe('Snapshot finder', function() {
 		expect(ec2.describeSnapshots.mostRecentCall.args[0]).toEqual({
 			Filters : [{
 				Name : 'status', Values : [ 'completed' ]
-			}]
+			}],
+			OwnerIds : ['self']
 		});
 
 		ec2.describeSnapshots.mostRecentCall.args[1](null, {
