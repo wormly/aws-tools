@@ -10,14 +10,12 @@ AWS.config.update({
 	region: process.env.AWS_REGION
 });
 
-var instanceDataGetter = new InstanceData(require('request'));
-
 var retrier = new Retrier(argv.attempts || 5);
 
 retrier.run(function(callback) {
 	var ec2 = new AWS.EC2();
 
-	var agent = new EIPAgent(ec2.client, instanceDataGetter);
+	var agent = new EIPAgent(ec2.client);
 
 	agent.remapEIP({
 		ip: argv.ip,
