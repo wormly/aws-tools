@@ -20,9 +20,7 @@ if (! argv.regexp) {
 }
 
 retrier.run(function(callback) {
-	deleter.deleteSnapshotsByDescription({
-		regexp: new RegExp(argv.regexp, 'i')
-	}, callback);
+	deleter.deleteSnapshots(callback);
 }, function(err) {
 	if (err) {
 		console.error(err);
