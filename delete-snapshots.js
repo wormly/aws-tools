@@ -14,11 +14,6 @@ var ec2 = new AWS.EC2();
 var retrier = new Retrier(argv.attempts || 5);
 var deleter = new SnapshotDeleter(ec2.client);
 
-if (! argv.regexp) {
-	console.log("Regexp is required");
-	return;
-}
-
 retrier.run(function(callback) {
 	deleter.deleteSnapshots(callback);
 }, function(err) {
