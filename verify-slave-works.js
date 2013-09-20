@@ -1,5 +1,5 @@
 var argv = require('optimist').
-	demand(['user', 'password', 'socket', 'server']).
+	demand(['user', 'password', 'socketPath', 'server']).
 	default('tempfile', '/tmp/fetched.sql').
 	default('db', 'wormlynew').
 	argv;
@@ -18,6 +18,8 @@ var headers;
 async.waterfall([
 	function(cb) {
 		db.query("show slave status", function(err, rows) {
+			if (err) return cb(err);
+
 			if (rows.Slave_IO_Running == 'Yes' && rows.Slave_SQL_Running == 'Yes') {
 				return cb("Slave IO and SQL threads are running");
 			}
