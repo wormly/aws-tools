@@ -4,7 +4,7 @@
   "dependencies": {
     "aws-sdk": {
       "version": "0.9.7-pre.8",
-      "from": "aws-sdk@",
+      "from": "aws-sdk@0.9.7-pre.8",
       "dependencies": {
         "xml2js": {
           "version": "0.2.4",
@@ -12,33 +12,35 @@
           "dependencies": {
             "sax": {
               "version": "0.5.2",
-              "from": "sax@>=0.4.2"
+              "from": "sax@0.5.2"
             }
           }
         },
         "xmlbuilder": {
           "version": "0.4.2",
-          "from": "xmlbuilder@latest"
+          "from": "xmlbuilder@0.4.2"
         }
       }
     },
     "optimist": {
       "version": "0.3.5",
-      "from": "optimist@",
+      "from": "optimist@0.3.5",
+      "resolved": "https://registry.npmjs.org/optimist/-/optimist-0.3.5.tgz",
       "dependencies": {
         "wordwrap": {
           "version": "0.0.2",
-          "from": "wordwrap@~0.0.2"
+          "from": "wordwrap@0.0.2"
         }
       }
     },
     "async": {
       "version": "0.1.22",
-      "from": "async@0.1.22"
+      "from": "async@0.1.22",
+      "resolved": "https://registry.npmjs.org/async/-/async-0.1.22.tgz"
     },
     "request": {
       "version": "2.12.0",
-      "from": "request@2.12.0",
+      "from": "https://registry.npmjs.org/request/-/request-2.12.0.tgz",
       "resolved": "https://registry.npmjs.org/request/-/request-2.12.0.tgz",
       "dependencies": {
         "form-data": {
@@ -67,29 +69,17 @@
         }
       }
     },
-    "underscore": {
-      "version": "1.4.3",
-      "from": "underscore@1.4.3"
-    },
-    "jasmine-node": {
-      "version": "1.0.28",
-      "from": "jasmine-node@1.0.28",
+    "mysql": {
+      "version": "2.0.0-alpha9",
+      "from": "mysql@",
       "dependencies": {
-        "coffee-script": {
-          "version": "1.4.0",
-          "from": "coffee-script@1.4.0"
+        "require-all": {
+          "version": "0.0.3",
+          "from": "require-all@0.0.3"
         },
-        "jasmine-reporters": {
-          "version": "0.2.1",
-          "from": "jasmine-reporters@0.2.1"
-        },
-        "requirejs": {
-          "version": "2.1.2",
-          "from": "requirejs@2.1.2"
-        },
-        "walkdir": {
-          "version": "0.0.5",
-          "from": "walkdir@0.0.5"
+        "bignumber.js": {
+          "version": "1.0.1",
+          "from": "bignumber.js@1.0.1"
         }
       }
     }
