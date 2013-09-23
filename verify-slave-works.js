@@ -56,7 +56,7 @@ async.waterfall([
 	},
 
 	function(rows, opts, cb) {
-		childProcess.exec('mysql -u'+argv.mysql.user+' -p'+argv.mysql.password+' -S'+argv.mysql.socket+' '+argv.db+' < '+argv.tempfile, cb)
+		childProcess.exec('mysql -u'+argv.mysql.user+' -p'+argv.mysql.password+' -S'+argv.mysql.socketPath+' '+argv.db+' < '+argv.tempfile, cb)
 	},
 
 	function(rows, opts, cb) {
