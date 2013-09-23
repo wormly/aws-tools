@@ -1,8 +1,16 @@
-var argv = require('optimist').
+var optimist = require('optimist').
 	demand(['user', 'password', 'socketPath', 'server']).
 	default('tempfile', '/tmp/fetched.sql').
-	default('db', 'wormlynew').
-	argv;
+	default('behindLimit', 5 * 60).
+	alias('h', 'help').
+	default('db', 'wormlynew');
+
+var argv = optimist.argv;
+
+if (argv.help) {
+	optimist.showHelp();
+	process.exit(0);
+}
 
 var async = require('async');
 var request = require('request');
@@ -22,6 +30,10 @@ async.waterfall([
 
 			if (rows.Slave_IO_Running == 'Yes' && rows.Slave_SQL_Running == 'Yes') {
 				return cb("Slave IO and SQL threads are running");
+			}
+
+			if (rows.Seconds_Behind_Master < argv.behindLimit) {
+				return cb("Seconds behind master is "+rows.Seconds_Behind_Master+" lt "+argv.behindLimit);
 			}
 
 			cb();
