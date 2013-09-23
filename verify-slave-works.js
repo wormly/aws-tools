@@ -69,7 +69,7 @@ async.waterfall([
 		db.query("start slave", cb);
 	},
 
-	function(cb) {
+	function(rows, opts, cb) {
 		fs.unlink(argv.tempfile, cb);
 	}
 ], function(err) {
