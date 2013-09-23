@@ -2,6 +2,7 @@ var optimist = require('optimist').
 	demand(['mysql', 'server']).
 	default('tempfile', '/tmp/fetched.sql').
 	default('behindLimit', 5 * 60).
+	default('masterPort', 3307).
 	alias('h', 'help').
 	default('db', 'wormlynew');
 
@@ -62,7 +63,7 @@ async.waterfall([
 	function(rows, opts, cb) {
 		var parsed = url.parse(argv.server);
 
-		db.query("change master to master_host = ?, master_user = ?, master_password = ?", [parsed.hostname, headers['x-mysql-username'], headers['x-mysql-password']], cb);
+		db.query("change master to master_host = ?, master_user = ?, master_password = ?, master_port = ?", [parsed.hostname, headers['x-mysql-username'], headers['x-mysql-password'], argv.masterPort], cb);
 	},
 
 	function(rows, opts, cb) {
