@@ -1,5 +1,5 @@
 var optimist = require('optimist').
-	demand(['user', 'password', 'socketPath', 'server']).
+	demand(['mysql', 'server']).
 	default('tempfile', '/tmp/fetched.sql').
 	default('behindLimit', 5 * 60).
 	alias('h', 'help').
@@ -20,7 +20,7 @@ var zlib = require('zlib');
 var childProcess = require('child_process');
 var url = require('url');
 
-var db = mysql.createConnection(argv);
+var db = mysql.createConnection(argv.mysql);
 var headers;
 
 async.waterfall([
