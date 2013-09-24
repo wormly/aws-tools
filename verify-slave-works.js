@@ -29,12 +29,10 @@ async.waterfall([
 		db.query("show slave status", function(err, rows) {
 			if (err) return cb(err);
 
-			if (rows.Slave_IO_Running == 'Yes' && rows.Slave_SQL_Running == 'Yes') {
-				return cb("Slave IO and SQL threads are running");
-			}
+			var status = rows[0];
 
-			if (rows.Seconds_Behind_Master < argv.behindLimit) {
-				return cb("Seconds behind master is "+rows.Seconds_Behind_Master+" lt "+argv.behindLimit);
+			if (status.Slave_IO_Running == 'Yes' && status.Slave_SQL_Running == 'Yes' && status.Seconds_Behind_Master < argv.behindLimit) {
+				return cb("Slave IO and SQL threads are running, behind_master is "+status.Seconds_Behind_Master);
 			}
 
 			cb();
