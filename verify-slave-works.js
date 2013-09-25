@@ -51,14 +51,14 @@ async.waterfall([
 
 	function(rows, opts, cb) {
 		console.log('Getting dump');
+
 		var gunzip = zlib.createGunzip();
-		request(argv.server, cb).pipe(gunzip).pipe(fs.createWriteStream(argv.tempfile));
-	},
 
-	function(r, body, cb) {
-		headers = r.headers;
+		request(argv.server, function(e, r, body) {
+			if (e) cb(e);
 
-		cb();
+			headers = r.headers;
+		}).pipe(gunzip).pipe(fs.createWriteStream(argv.tempfile)).on('close', cb);
 	},
 
 	function(cb) {
