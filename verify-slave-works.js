@@ -40,10 +40,12 @@ async.waterfall([
 	},
 
 	function(cb) {
+		console.log('Stopping slave');
 		db.query("stop slave", cb);
 	},
 
 	function(rows, opts, cb) {
+		console.log('Getting dump');
 		var gunzip = zlib.createGunzip();
 		request(argv.server, cb).pipe(gunzip).pipe(fs.createWriteStream(argv.tempfile));
 	},
@@ -55,6 +57,7 @@ async.waterfall([
 	},
 
 	function(cb) {
+		console.log('Loading dump');
 		childProcess.exec('mysql -u'+argv.mysql.user+' -p'+argv.mysql.password+' -S'+argv.mysql.socketPath+' '+argv.db+' < '+argv.tempfile, cb)
 	},
 
@@ -62,14 +65,17 @@ async.waterfall([
 		var parsed = url.parse(argv.server);
 		var hostname = parsed.hostname.replace('localhost', '127.0.0.1'); // if it's localhost, mysql will use socket no matter what
 
+		console.log('Changing master');
 		db.query("change master to master_host = ?, master_user = ?, master_password = ?, master_port = ?", [hostname, headers['x-mysql-username'], headers['x-mysql-password'], argv.masterPort], cb);
 	},
 
 	function(rows, opts, cb) {
+		console.log('Starting slave');
 		db.query("start slave", cb);
 	},
 
 	function(rows, opts, cb) {
+		console.log('Deleting dump');
 		fs.unlink(argv.tempfile, cb);
 	}
 ], function(err) {
