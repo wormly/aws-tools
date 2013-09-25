@@ -40,6 +40,10 @@ async.waterfall([
 	},
 
 	function(cb) {
+		db.query("stop slave", cb);
+	},
+
+	function(rows, opts, cb) {
 		var gunzip = zlib.createGunzip();
 		request(argv.server, cb).pipe(gunzip).pipe(fs.createWriteStream(argv.tempfile));
 	},
@@ -51,10 +55,6 @@ async.waterfall([
 	},
 
 	function(cb) {
-		db.query("stop slave", cb);
-	},
-
-	function(rows, opts, cb) {
 		childProcess.exec('mysql -u'+argv.mysql.user+' -p'+argv.mysql.password+' -S'+argv.mysql.socketPath+' '+argv.db+' < '+argv.tempfile, cb)
 	},
 
