@@ -44,6 +44,11 @@ async.waterfall([
 		db.query("stop slave", cb);
 	},
 
+	function(cb) {
+		console.log('Resetting slave');
+		db.query("reset slave", cb);
+	},
+
 	function(rows, opts, cb) {
 		console.log('Getting dump');
 		var gunzip = zlib.createGunzip();
