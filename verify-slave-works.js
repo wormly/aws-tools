@@ -44,7 +44,7 @@ async.waterfall([
 		db.query("stop slave", cb);
 	},
 
-	function(cb) {
+	function(rows, opts, cb) {
 		console.log('Resetting slave');
 		db.query("reset slave", cb);
 	},
@@ -66,7 +66,7 @@ async.waterfall([
 		childProcess.exec('mysql -u'+argv.mysql.user+' -p'+argv.mysql.password+' -S'+argv.mysql.socketPath+' '+argv.db+' < '+argv.tempfile, cb)
 	},
 
-	function(rows, opts, cb) {
+	function(stdout, stderr, cb) {
 		var parsed = url.parse(argv.server);
 		var hostname = parsed.hostname.replace('localhost', '127.0.0.1'); // if it's localhost, mysql will use socket no matter what
 
