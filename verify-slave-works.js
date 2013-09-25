@@ -31,7 +31,7 @@ async.waterfall([
 
 			var status = rows[0];
 
-			if (status.Slave_IO_Running == 'Yes' && status.Slave_SQL_Running == 'Yes' && status.Seconds_Behind_Master < argv.behindLimit) {
+			if (status && status.Slave_IO_Running == 'Yes' && status.Slave_SQL_Running == 'Yes' && status.Seconds_Behind_Master < argv.behindLimit) {
 				return cb("Slave IO and SQL threads are running, behind_master is "+status.Seconds_Behind_Master);
 			}
 
