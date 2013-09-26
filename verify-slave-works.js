@@ -68,10 +68,9 @@ async.waterfall([
 
 	function(stdout, stderr, cb) {
 		var parsed = url.parse(argv.server);
-		var hostname = parsed.hostname.replace('localhost', '127.0.0.1'); // if it's localhost, mysql will use socket no matter what
 
 		console.log('Changing master');
-		db.query("change master to master_host = ?, master_user = ?, master_password = ?, master_port = ?", [hostname, headers['x-mysql-username'], headers['x-mysql-password'], argv.masterPort], cb);
+		db.query("change master to master_host = ?, master_user = ?, master_password = ?, master_port = ?", [parsed.hostname, headers['x-mysql-username'], headers['x-mysql-password'], argv.masterPort], cb);
 	},
 
 	function(rows, opts, cb) {
