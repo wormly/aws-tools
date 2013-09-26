@@ -41,15 +41,21 @@ async.waterfall([
 
 	function(cb) {
 		console.log('Stopping slave');
-		db.query("stop slave", cb);
+
+		db.query("stop slave", function(err) {
+			cb(err);
+		});
 	},
 
-	function(rows, opts, cb) {
+	function(cb) {
 		console.log('Resetting slave');
-		db.query("reset slave", cb);
+
+		db.query("reset slave", function(err) {
+			cb(err);
+		});
 	},
 
-	function(rows, opts, cb) {
+	function(cb) {
 		console.log('Getting dump');
 
 		var gunzip = zlib.createGunzip();
@@ -62,23 +68,30 @@ async.waterfall([
 	},
 
 	function(cb) {
-		console.log('Loading dump');
-		childProcess.exec('mysql -u'+argv.mysql.user+' -p'+argv.mysql.password+' -S'+argv.mysql.socketPath+' '+argv.db+' < '+argv.tempfile, cb)
-	},
+		console.log('Changing master');
 
-	function(stdout, stderr, cb) {
 		var parsed = url.parse(argv.server);
 
-		console.log('Changing master');
-		db.query("change master to master_host = ?, master_user = ?, master_password = ?, master_port = ?", [parsed.hostname, headers['x-mysql-username'], headers['x-mysql-password'], argv.masterPort], cb);
+		db.query("change master to master_host = ?, master_user = ?, master_password = ?, master_port = ?", [parsed.hostname, headers['x-mysql-username'], headers['x-mysql-password'], argv.masterPort], function(err) {
+			cb(err);
+		});
 	},
 
-	function(rows, opts, cb) {
+	function(cb) {
+		console.log('Loading dump');
+		childProcess.exec('mysql -u'+argv.mysql.user+' -p'+argv.mysql.password+' -S'+argv.mysql.socketPath+' '+argv.db+' < '+argv.tempfile, function(err, stdout, stderr) {
+			cb(err || stderr);
+		})
+	},
+
+	function(cb) {
 		console.log('Starting slave');
-		db.query("start slave", cb);
+		db.query("start slave", function(err) {
+			cb(err);
+		});
 	},
 
-	function(rows, opts, cb) {
+	function(cb) {
 		console.log('Deleting dump');
 		fs.unlink(argv.tempfile, cb);
 	}
