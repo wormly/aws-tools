@@ -32,7 +32,8 @@ async.waterfall([
 			var status = rows[0];
 
 			if (status && status.Slave_IO_Running == 'Yes' && status.Slave_SQL_Running == 'Yes' && status.Seconds_Behind_Master < argv.behindLimit) {
-				return cb("Slave IO and SQL threads are running, behind_master is "+status.Seconds_Behind_Master);
+				// "Slave IO and SQL threads are running, behind_master is "+status.Seconds_Behind_Master
+				return cb(true);
 			}
 
 			cb();
@@ -96,7 +97,7 @@ async.waterfall([
 		fs.unlink(argv.tempfile, cb);
 	}
 ], function(err) {
-	if (err) console.log(err);
+	if (err && err !== true) console.log(err);
 
 	db.end();
 });
