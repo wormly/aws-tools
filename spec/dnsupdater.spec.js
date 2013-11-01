@@ -4,7 +4,7 @@ require('./utils.js');
 describe('DNS Updater', function() {
 	var DNSUpdater = require('../lib/dnsupdater.js');
 
-	var updater, route, ip = '1.2.3.4', record = 'chef.dev.worm.ly', ttl = 60;
+	var updater, route, ip = '1.2.3.4,2.2.2.2', record = 'chef.dev.worm.ly', ttl = 60;
 
 	var updatedCb;
 
@@ -63,6 +63,8 @@ describe('DNS Updater', function() {
 							TTL : 60,
 							ResourceRecords : [{
 								Value: '1.2.3.4'
+							}, {
+								Value: '2.2.2.2'
 							}]
 						}
 					}
