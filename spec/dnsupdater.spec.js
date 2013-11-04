@@ -4,7 +4,7 @@ require('./utils.js');
 describe('DNS Updater', function() {
 	var DNSUpdater = require('../lib/dnsupdater.js');
 
-	var updater, route, ip = '1.2.3.4,2.2.2.2,', record = 'chef.dev.worm.ly', ttl = 60;
+	var updater, route, ip = '1.2.3.4,2.2.2.2,', record = 'chef.dev.worm.ly', ttl = 60, cname = 'a.d.wormly.dev';
 
 	var updatedCb;
 
@@ -14,7 +14,7 @@ describe('DNS Updater', function() {
 		updater = new DNSUpdater(route);
 	});
 
-	it('updates', function() {
+	it('updates ip', function() {
 		updater.run({
 			recordName: record,
 			ttl: ttl,
@@ -65,6 +65,44 @@ describe('DNS Updater', function() {
 								Value: '1.2.3.4'
 							}, {
 								Value: '2.2.2.2'
+							}]
+						}
+					}
+				]
+			}
+		});
+	});
+
+	it('updates cname', function() {
+		updater.run({
+			recordName: record,
+			ttl: ttl,
+			ip: cname
+		}, updatedCb);
+
+		route.listHostedZones.mostRecentCall.args[0](null, {
+			HostedZones: [{
+				Name: 'dev.worm.ly.',
+				Id: '/zonezone/idid'
+			}]
+		});
+
+		expect(route.listResourceRecordSets.mostRecentCall.args[0]).toEqual({ HostedZoneId : 'idid' });
+
+		route.listResourceRecordSets.mostRecentCall.args[1](null, { ResourceRecordSets: [] });
+
+		expect(route.changeResourceRecordSets.mostRecentCall.args[0]).toEqual({
+			HostedZoneId : 'idid',
+			ChangeBatch: {
+				Changes : [
+					{
+						Action : 'CREATE',
+						ResourceRecordSet: {
+							Name : 'chef.dev.worm.ly.',
+							Type : 'CNAME',
+							TTL : 60,
+							ResourceRecords : [{
+								Value: cname
 							}]
 						}
 					}
