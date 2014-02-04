@@ -12,11 +12,13 @@ AWS.config.update({
 
 var retrier = new Retrier(argv.attempts || 5);
 
+var ec2 = new AWS.EC2();
+
+retrier.wrap(ec2, ['associateAddress']);
+
+var agent = new EIPAgent(ec2.client);
+
 retrier.run(function(callback) {
-	var ec2 = new AWS.EC2();
-
-	var agent = new EIPAgent(ec2.client);
-
 	agent.remapEIP({
 		ip: argv.ip,
 		instance: argv.instance

@@ -15,6 +15,8 @@ var ec2 = new AWS.EC2();
 var creator = new VolumeCreator(ec2.client);
 var retrier = new Retrier(argv.attempts || 5);
 
+retrier.wrap(ec2, ['modifyInstanceAttribute', 'describeInstanceAttribute', 'attachVolume', 'createVolume']);
+
 var options = {};
 ['snapshotSize', 'snapshotId', 'device'].forEach(function(key) {
 	options[key] = argv[key];

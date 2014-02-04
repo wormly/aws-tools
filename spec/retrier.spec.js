@@ -14,6 +14,34 @@ describe('Retrier', function() {
 		retrier = new Retrier(attempts, baseTimeout);
 	});
 
+	it('wraps', function() {
+		var testObj = {
+			postEc: runCallback
+		};
+
+		retrier.wrap(testObj, ['postEc']);
+
+		var request = 'request!';
+
+		testObj.postEc(request, resultCallback);
+
+		expect(resultCallback).not.toHaveBeenCalled();
+		expect(runCallback.mostRecentCall.args[0]).toEqual(request);
+
+		runCallback.mostRecentCall.args[1]('could not do!');
+
+		jasmine.Clock.tick(baseTimeout);
+
+		expect(runCallback.callCount).toEqual(2);
+		expect(runCallback.mostRecentCall.args[0]).toEqual(request);
+
+		expect(resultCallback).not.toHaveBeenCalled();
+
+		runCallback.mostRecentCall.args[1](null, 'results');
+
+		expect(resultCallback).toHaveBeenCalledWith(null, 'results');
+	});
+
 	it('retries to success', function() {
 		retrier.run(runCallback, resultCallback);
 
