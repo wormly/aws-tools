@@ -12,10 +12,11 @@ AWS.config.update({
 
 var ec2 = new AWS.EC2();
 
-var creator = new VolumeCreator(ec2.client);
 var retrier = new Retrier(argv.attempts || 5);
 
-retrier.wrap(ec2, ['modifyInstanceAttribute', 'describeInstanceAttribute', 'attachVolume', 'createVolume']);
+retrier.wrap(ec2.client, ['modifyInstanceAttribute', 'describeInstanceAttribute', 'attachVolume', 'createVolume']);
+
+var creator = new VolumeCreator(ec2.client);
 
 var options = {};
 ['snapshotSize', 'snapshotId', 'device'].forEach(function(key) {

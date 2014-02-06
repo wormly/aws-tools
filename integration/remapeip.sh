@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export AWS_INSTANCE=i-be93c5f4
+export AWS_INSTANCE=i-8508e8ca
 export AWS_REGION=eu-west-1
-export AWS_EIP=79.125.110.186
+export AWS_EIP=54.195.250.16
 
 echo "Mapping IP $AWS_EIP to instance $AWS_INSTANCE"
 
