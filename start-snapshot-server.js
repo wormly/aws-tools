@@ -5,6 +5,7 @@ var argv = require('optimist').
 	argv;
 
 // http://localhost:2014/snapshots/43200/Chef|Stora%20%2Fmysqldata_.|dbslavesnapshots
+// curl -v -H 'X-API-Password: t9s5o97bdw75jyvi' 'http://chefj4.dev.worm.ly:2014/snapshots/43200/Chef|Stora%20%2Fmysqldata_.|dbslavesnapshots'
 
 var express = require('express');
 
