@@ -6,7 +6,8 @@
 		"optimist": "",
 		"async": "",
 		"request": "",
-		"mysql": ""
+		"mysql": "",
+		"express": ""
 	},
 	"devDependencies": {
 		"jasmine-node": "",

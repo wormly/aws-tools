@@ -12,7 +12,7 @@ AWS.config.update({
 
 var ec2 = new AWS.EC2();
 var retrier = new Retrier(argv.attempts || 5);
-var deleter = new SnapshotDeleter(ec2.client);
+var deleter = new SnapshotDeleter(ec2);
 
 retrier.run(function(callback) {
 	deleter.deleteSnapshots(callback);

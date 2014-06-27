@@ -14,9 +14,9 @@ var retrier = new Retrier(argv.attempts || 5);
 
 var ec2 = new AWS.EC2();
 
-retrier.wrap(ec2.client, ['associateAddress']);
+retrier.wrap(ec2, ['associateAddress']);
 
-var agent = new EIPAgent(ec2.client);
+var agent = new EIPAgent(ec2);
 
 retrier.run(function(callback) {
 	agent.remapEIP({

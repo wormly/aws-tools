@@ -15,8 +15,8 @@ var ec2 = new AWS.EC2();
 var retrier = new Retrier(argv.attempts || 5);
 
 retrier.run(function(callback) {
-	var finder = new SnapshotFinder(ec2.client);
-
+	var finder = new SnapshotFinder(ec2);
+	
 	finder.findSnapshot({
 		regexp: new RegExp(argv.regexp, 'i')
 	}, callback);

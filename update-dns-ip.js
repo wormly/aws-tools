@@ -13,7 +13,7 @@ AWS.config.update({
 
 var route = new AWS.Route53();
 var retrier = new Retrier(argv.attempts || 5);
-var updater = new DNSUpdater(route.client);
+var updater = new DNSUpdater(route);
 
 retrier.run(function(callback) {
 	updater.run({
