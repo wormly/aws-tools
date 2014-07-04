@@ -1,11 +1,7 @@
-#!/bin/bash -x
+#!/bin/bash
 
-export AWS_REGION=eu-west-1
-export AWS_AZ=eu-west-1c
-export AWS_INSTANCE=i-16a6f55c
-
-SNAPSHOT_SIZE=8
-SNAPSHOT_ID=snap-a9d92082
+SNAPSHOT_SIZE=1
+SNAPSHOT_ID=snap-8ab72873
 DEVICE=/dev/sdo
 
 MOUNTED_VOLUME=$(ec2-describe-instances $AWS_INSTANCE | grep $DEVICE | awk '{print $3}');
@@ -33,6 +29,7 @@ if ec2-describe-instances $AWS_INSTANCE | grep $DEVICE | grep true; then
 	echo "Attached $volumeId. DeleteOnTermination set to true";
 else
 	echo "Failure $volumeId";
+	exit 1
 fi
 
-# detach $volumeId
+aws ec2 create-snapshot --volume-id $volumeId --description "integ-delete-me"

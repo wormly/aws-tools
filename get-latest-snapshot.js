@@ -24,6 +24,8 @@ retrier.run(function(callback) {
 	if (err) {
 		console.error(err);
 		process.exit(100);
+	} else if (! snapshot) {
+		// nothing found
 	} else {
 		console.log(snapshot.SnapshotId, snapshot.VolumeSize);
 	}
