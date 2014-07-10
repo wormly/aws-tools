@@ -1,8 +1,5 @@
 
-var argv = require('optimist').
-	default('port', 2014).
-	default('password', 't9s5o97bdw75jyvi').
-	argv;
+var argv = require('optimist').default('port', 2014).argv;
 
 // http://localhost:2014/snapshots/43200/Chef|Stora%20%2Fmysqldata_.|dbslavesnapshots
 // curl -v -H 'X-API-Password: t9s5o97bdw75jyvi' 'http://chefj4.dev.worm.ly:2014/snapshots/43200/Chef|Stora%20%2Fmysqldata_.|dbslavesnapshots'
@@ -19,18 +16,20 @@ AWS.config.update({
 	region: process.env.AWS_REGION
 });
 
-var ec2 = new AWS.EC2();
-
-var finder = new SnapshotFinder(ec2);
-
+var finders = {};
 var app = express();
 
 app.set('json spaces', 2);
 
-app.get('/snapshots/:maxage/:regexp', function(req, res) {
-	if (req.headers.host.indexOf('localhost') == -1 && req.headers['x-api-password'] != argv.password) {
-		return res.send(403, "Wrong api password");
+app.get('/snapshots/:region/:maxage/:regexp', function(req, res) {
+	var region = req.params.region;
+	
+	if (! (region in finders)) {
+		var ec2 = new AWS.EC2({region: region});
+		finders[region] = new SnapshotFinder(ec2);
 	}
+	
+	var finder = finders[region];
 	
 	var regexp = new RegExp(req.params.regexp, 'i');
 	
@@ -72,6 +71,6 @@ app.get('/snapshots/:maxage/:regexp', function(req, res) {
 	});
 });
 
-app.listen(argv.port, function() {
-	console.log('Started on', argv.port);
+app.listen(argv.port, '127.0.0.1', function() {
+	console.log('Started on', '127.0.0.1', ':', argv.port);
 });
