@@ -37,7 +37,7 @@ app.get('/snapshots/:region/:maxage/:regexp', function(req, res) {
 		regexp: regexp,
 		returnAll: true
 	}, function(err, snapshots) {
-		// bad starttime returned?
+		if (err) throw err;
 
 		var seenTags = [];
 		var matchingSnapshots = [];
