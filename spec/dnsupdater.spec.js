@@ -110,4 +110,45 @@ describe('DNS Updater', function() {
 			}
 		});
 	});
+
+	it('updates mx', function() {
+		updater.run({
+			recordName: record,
+			ttl: ttl,
+			ip: '10 a.b.c',
+			type: 'MX'
+		}, updatedCb);
+
+		route.listHostedZones.mostRecentCall.args[0](null, {
+			HostedZones: [{
+				Name: 'dev.worm.ly.',
+				Id: '/zonezone/idid'
+			}]
+		});
+		
+		expect(route.listResourceRecordSets.mostRecentCall.args[0]).toEqual({ HostedZoneId : 'idid' });
+		
+		route.listResourceRecordSets.mostRecentCall.args[1](null, { ResourceRecordSets: [{
+			name: record
+		}] });
+
+		expect(route.changeResourceRecordSets.mostRecentCall.args[0]).toEqual({
+			HostedZoneId : 'idid',
+			ChangeBatch: {
+				Changes : [
+					{
+						Action : 'CREATE',
+						ResourceRecordSet: {
+							Name : 'chef.dev.worm.ly.',
+							Type : 'MX',
+							TTL : 60,
+							ResourceRecords : [{
+								Value: '10 a.b.c'
+							}]
+						}
+					}
+				]
+			}
+		});
+	});
 });

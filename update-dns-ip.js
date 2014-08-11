@@ -19,7 +19,8 @@ retrier.run(function(callback) {
 	updater.run({
 		recordName: argv.name, // e.g. chef.dev.worm.ly., required
 		ttl: argv.ttl || 600,
-		ip: argv.ip // required
+		ip: argv.ip, // required
+		type: argv.type || undefined 
 	}, callback);
 }, function(err, data) {
 	if (err) {
