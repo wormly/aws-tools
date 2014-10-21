@@ -23,7 +23,8 @@ describe('Volume creator', function() {
 			snapshotId: snapId,
 			device: device,
 			zone: zone,
-			instance: instance
+			instance: instance,
+			volumeType: 'gp2'
 		}, doneCallback);
 
 		ec2.createVolume.mostRecentCall.args[1]({err: 1});
@@ -34,7 +35,8 @@ describe('Volume creator', function() {
 			request : {
 				Size : snapSize,
 				SnapshotId : snapId,
-				AvailabilityZone : zone
+				AvailabilityZone : zone,
+				VolumeType: 'gp2'
 			}
 		});
 	});

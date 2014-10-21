@@ -25,6 +25,11 @@ var options = {};
 
 options.instance = process.env.AWS_INSTANCE;
 options.zone = process.env.AWS_AZ;
+options.volumeType = argv.volumeType || 'standard';
+
+if (['gp2', 'io1', 'standard'].indexOf(options.volumeType) == -1) {
+	throw "Unsupported volume type "+options.volumeType;
+}
 
 retrier.run(function(callback) {
 	creator.createVolume(options, callback);
