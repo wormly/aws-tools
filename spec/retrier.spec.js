@@ -4,14 +4,14 @@ require('./utils.js');
 describe('Retrier', function() {
 	var Retrier = require('../lib/retrier.js');
 
-	var retrier, attempts = 3, runCallback, resultCallback, baseTimeout = 1000;
+	var retrier, attempts = 3, runCallback, resultCallback, baseTimeout = 1000, runTimeout = 30000;
 
 	beforeEach(function() {
 		jasmine.Clock.useMock();
 
 		runCallback = jasmine.createSpy();
 		resultCallback = jasmine.createSpy();
-		retrier = new Retrier(attempts, baseTimeout);
+		retrier = new Retrier(attempts, baseTimeout, runTimeout);
 	});
 
 	it('wraps', function() {
@@ -79,5 +79,19 @@ describe('Retrier', function() {
 		expect(resultCallback.callCount).toEqual(1);
 
 		expect(resultCallback).toHaveBeenCalledWith('Attempts exceeded');
+	});
+	
+	it('uses run timeout', function() {
+		retrier.run(runCallback, resultCallback);
+
+		jasmine.Clock.tick(runTimeout + 1);
+		
+		expect(runCallback.callCount).toEqual(2);
+		
+		runCallback.calls[0].args[0]();
+		expect(resultCallback.callCount).toEqual(0);
+
+		runCallback.calls[1].args[0]();
+		expect(resultCallback.callCount).toEqual(1);
 	});
 });
