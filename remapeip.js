@@ -4,11 +4,7 @@ var AWS = require('aws-sdk');
 var Retrier = require('./lib/retrier.js');
 var EIPAgent = require('./lib/eipagent.js');
 
-AWS.config.update({
-	accessKeyId: process.env.AWS_KEY,
-	secretAccessKey: process.env.AWS_SECRET,
-	region: process.env.AWS_REGION
-});
+require('./update-config.js');
 
 var retrier = new Retrier(argv.attempts || 5);
 
