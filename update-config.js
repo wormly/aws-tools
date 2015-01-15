@@ -6,6 +6,6 @@ AWS.config.update({
 	secretAccessKey: process.env.AWS_SECRET,
 	region: process.env.AWS_REGION,
 	httpOptions: {
-		timeout: 120000
+		timeout: 300000
 	}
 });

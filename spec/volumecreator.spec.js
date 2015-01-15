@@ -30,7 +30,9 @@ describe('Volume creator', function() {
 		ec2.createVolume.mostRecentCall.args[1]({err: 1});
 
 		expect(doneCallback).toHaveBeenCalledWith({
-			err : 1,
+			err: {
+				err : 1
+			},
 			operation : 'createVolume',
 			request : {
 				Size : snapSize,
@@ -79,8 +81,10 @@ describe('Volume creator', function() {
 			VolumeId : volume,
 			Device : device
 		});
-
-		ec2.attachVolume.mostRecentCall.args[1](null, {});
+		
+		ec2.attachVolume.mostRecentCall.args[1]({
+			code: 'VolumeInUse'
+		}, {});
 
 		expect(ec2.describeInstanceAttribute.mostRecentCall.args[0]).toEqual({
 			InstanceId : instance,
