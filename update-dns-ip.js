@@ -16,7 +16,8 @@ retrier.run(function(callback) {
 		recordName: argv.name, // e.g. chef.dev.worm.ly., required
 		ttl: argv.ttl || 600,
 		ip: argv.ip, // required
-		type: argv.type || undefined 
+		type: argv.type || undefined,
+		zone: argv.zone || undefined 
 	}, callback);
 }, function(err, data) {
 	if (err) {

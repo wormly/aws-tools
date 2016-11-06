@@ -151,4 +151,46 @@ describe('DNS Updater', function() {
 			}
 		});
 	});
+
+	it('updates TXT on a subdomain', function() {
+		updater.run({
+			recordName: "_somechallenge.www.dev.worm.ly",
+			zone: "dev.worm.ly.",
+			ttl: ttl,
+			ip: '"some text record"',
+			type: 'TXT'
+		}, updatedCb);
+
+		route.listHostedZones.mostRecentCall.args[0](null, {
+			HostedZones: [{
+				Name: 'dev.worm.ly.',
+				Id: '/zonezone/idid'
+			}]
+		});
+		
+		expect(route.listResourceRecordSets.mostRecentCall.args[0]).toEqual({ HostedZoneId : 'idid' });
+		
+		route.listResourceRecordSets.mostRecentCall.args[1](null, { ResourceRecordSets: [{
+			name: "_somechallenge.www.dev.worm.ly"
+		}] });
+
+		expect(route.changeResourceRecordSets.mostRecentCall.args[0]).toEqual({
+			HostedZoneId : 'idid',
+			ChangeBatch: {
+				Changes : [
+					{
+						Action : 'CREATE',
+						ResourceRecordSet: {
+							Name : '_somechallenge.www.dev.worm.ly.',
+							Type : 'TXT',
+							TTL : 60,
+							ResourceRecords : [{
+								Value: '"some text record"'
+							}]
+						}
+					}
+				]
+			}
+		});
+	});
 });
