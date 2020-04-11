@@ -4,10 +4,10 @@
 	"dependencies": {
 		"aws-sdk": "",
 		"optimist": "",
-		"async": "",
-		"request": "",
-		"mysql": "",
-		"express": ""
+		"async": "~0.1",
+		"request": "~2",
+		"mysql": "~2",
+		"express": "~4"
 	},
 	"devDependencies": {
 		"jasmine-node": "",
