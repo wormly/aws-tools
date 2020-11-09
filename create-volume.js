@@ -3,6 +3,7 @@ var argv = require('optimist').argv;
 var Retrier = require('./lib/retrier.js');
 var VolumeCreator = require('./lib/volumecreator.js');
 var AWS = require('aws-sdk');
+// AWS.config.logger = console;
 
 require('./update-config.js');
 
@@ -15,17 +16,18 @@ retrier.wrap(ec2, ['modifyInstanceAttribute', 'describeInstanceAttribute', 'atta
 var creator = new VolumeCreator(ec2);
 
 var options = {};
-['snapshotSize', 'snapshotId', 'device'].forEach(function(key) {
+[
+	'snapshotSize',
+	'snapshotId',
+	'device',
+	'iops',
+].forEach(function(key) {
 	options[key] = argv[key];
 });
 
 options.instance = process.env.AWS_INSTANCE;
 options.zone = process.env.AWS_AZ;
-options.volumeType = argv.volumeType || 'standard';
-
-if (['gp2', 'io1', 'standard'].indexOf(options.volumeType) == -1) {
-	throw "Unsupported volume type "+options.volumeType;
-}
+options.volumeType = argv.volumeType || 'gp2';
 
 retrier.run(function(callback) {
 	creator.createVolume(options, callback);
